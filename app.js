@@ -26,7 +26,7 @@ const message = {
 // Setting HTTPS Secure Headers
 const rLimiter = rateLimiter({
   // httpOnly: true,
-  windowMs: 60 * 1000 * 0,
+  windowMs: 60 * 1000 * 60, // for 1 hour
   limit: 50,
   message,
 });
