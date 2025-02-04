@@ -23,22 +23,34 @@ const createProduct = async (req, res, next) => {
   res.status(201).json(product);
 };
 // Caching With Redis.
-const getUserFromCache = async (key, res) => {
+const getDataFromCache = async (key, res) => {
   if (await client.get(key)) {
-    return res.status(200).json(JSON.parse(await client.get(key)));
+    return res?.status(200).json(JSON.parse(await client.get(key)));
   }
 };
-const setCache = (key, data) => {
-  client.setEx(key, DEFAULT_EXPIRATION, JSON.stringify(data));
+const setCache = async (key, data) => {
+  await client.setEx(key, DEFAULT_EXPIRATION, JSON.stringify(data));
 };
 // Caching With Redis.
 const getAllProducts = async (req, res, next) => {
   let documents = await Product.find({});
-  setCache("products", documents);
+  await setCache("products", documents);
   if (!documents.length) {
     return next("no Products yet..!");
   }
-  res.status(200).json({
+
+  if (req.query.productName) {
+    // await getDataFromCache(
+    //   `products?productName=${req.query.productName}`,
+    //   res
+    // );
+    documents = await Product.find({ productName: req.query.productName });
+    if (!documents.length) {
+      return next("no Products matches this query..!");
+    }
+    // await setCache(`products?productName=${req.query.productName}`, documents);
+  }
+  return res.status(200).json({
     documentsLength: documents.length,
     documents,
   });

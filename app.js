@@ -30,7 +30,6 @@ const rLimiter = rateLimiter({
   limit: 50,
   message,
 });
-app.use(rLimiter);
 app.use(express.static(path.join(__dirname, "staticFiles")));
 
 // Middlewares
@@ -38,7 +37,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(cors({ origin: "*" }));
 app.use(morgan("dev"));
-
+app.use(rLimiter)
 // ROUTES
 app.use("/users", usersRouter);
 app.use("/comments", commentRoute);
