@@ -40,15 +40,15 @@ const getAllProducts = async (req, res, next) => {
   }
 
   if (req.query.productName) {
-    // await getDataFromCache(
-    //   `products?productName=${req.query.productName}`,
-    //   res
-    // );
+    await getDataFromCache(
+      `products?productName=${req.query.productName}`,
+      res
+    );
     documents = await Product.find({ productName: req.query.productName });
     if (!documents.length) {
       return next("no Products matches this query..!");
     }
-    // await setCache(`products?productName=${req.query.productName}`, documents);
+    await setCache(`products?productName=${req.query.productName}`, documents);
   }
   return res.status(200).json({
     documentsLength: documents.length,

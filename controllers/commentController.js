@@ -21,7 +21,6 @@ const createComment = async (req, res, next) => {
     const product = await Product.findById(req.params.productId);
     // commentedBy: req.body.publishedBy,
     await product.save();
-    console.lg(product.commentedBy.indexOf(req.body.publishedBy));
     if (product.commentedBy.indexOf(req.body.publishedBy) === -1) {
       product.commentedBy.push(req.body.publishedBy);
       const document = await Comment.create(req.body);

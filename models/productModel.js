@@ -31,6 +31,7 @@ const productSchema = new Schema(
   }
 );
 // index to product name to speed up searching
+
 productSchema.index({ productName: 1 }, {});
 productSchema.virtual("finalPrice").get(function () {
   return this.price - 10;

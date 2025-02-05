@@ -131,6 +131,5 @@ userSchema.pre(/^find/, function (n) {
   });
   n();
 });
-
 const User = new model("User", userSchema);
 module.exports = User;

@@ -25,9 +25,9 @@ const message = {
 
 // Setting HTTPS Secure Headers
 const rLimiter = rateLimiter({
-  // httpOnly: true,
-  windowMs: 60 * 1000 * 60, // for 1 hour
-  limit: 50,
+  httpOnly: true,
+  windowMs: 60 * 1000 * 0 , // for 0 hour
+  limit: 150,
   message,
 });
 app.use(express.static(path.join(__dirname, "staticFiles")));
@@ -37,7 +37,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(cors({ origin: "*" }));
 app.use(morgan("dev"));
-app.use(rLimiter)
+app.use(rLimiter);
 // ROUTES
 app.use("/users", usersRouter);
 app.use("/comments", commentRoute);
