@@ -25,7 +25,10 @@ const message = {
 
 // Setting HTTPS Secure Headers
 app.set("trust proxy", 1);
-app.use((req, res, next) => console.log(req.ip));
+app.use((req, res, next) => {
+  console.log(`Your Ip Is: ${req.ip}`);
+  next();
+});
 const rLimiter = rateLimiter({
   httpOnly: true,
   windowMs: 60 * 1000 * 0, // for 0 hour
