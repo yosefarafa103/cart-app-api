@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 });
 const rLimiter = rateLimiter({
   httpOnly: true,
-  windowMs: 60 * 1000 * 0, // for 0 hour
+  windowMs: 60 * 1000 * 10, // for 10 mins
   limit: 150,
   message,
 });
