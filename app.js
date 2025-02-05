@@ -24,12 +24,15 @@ const message = {
 };
 
 // Setting HTTPS Secure Headers
+app.set("trust proxy", 1);
+app.use((req, res, next) => console.log(req.ip));
 const rLimiter = rateLimiter({
   httpOnly: true,
-  windowMs: 60 * 1000 * 0 , // for 0 hour
+  windowMs: 60 * 1000 * 0, // for 0 hour
   limit: 150,
   message,
 });
+
 app.use(express.static(path.join(__dirname, "staticFiles")));
 
 // Middlewares

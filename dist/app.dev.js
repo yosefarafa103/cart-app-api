@@ -43,6 +43,10 @@ var message = {
   message: "too many requests! try again later"
 }; // Setting HTTPS Secure Headers
 
+app.set("trust proxy", 1);
+app.use(function (req, res, next) {
+  return console.log(req.ip);
+});
 var rLimiter = rateLimiter({
   httpOnly: true,
   windowMs: 60 * 1000 * 0,
