@@ -43,7 +43,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(cors({ origin: "*" }));
 app.use(morgan("dev"));
-app.use(rLimiter);
+// app.use(rLimiter);
 // ROUTES
 app.use("/users", usersRouter);
 app.use("/comments", commentRoute);
