@@ -24,17 +24,17 @@ const message = {
 };
 
 // Setting HTTPS Secure Headers
-app.set("trust proxy", 1);
-app.use((req, res, next) => {
-  console.log(`Your Ip Is: ${req.ip}`);
-  next();
-});
-const rLimiter = rateLimiter({
-  httpOnly: true,
-  windowMs: 60 * 1000 * 10, // for 10 mins
-  limit: 150,
-  message,
-});
+// app.set("trust proxy", 1);
+// app.use((req, res, next) => {
+//   console.log(`Your Ip Is: ${req.ip}`);
+//   next();
+// });
+// const rLimiter = rateLimiter({
+//   httpOnly: true,
+//   windowMs: 60 * 1000 * 10, // for 10 mins
+//   limit: 150,
+//   message,
+// });
 
 app.use(express.static(path.join(__dirname, "staticFiles")));
 
