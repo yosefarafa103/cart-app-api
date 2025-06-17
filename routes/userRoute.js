@@ -8,6 +8,7 @@ const {
   deleteMyData,
   logout,
   updateUserPassword,
+  blockUser,
 } = require("../controllers/authController");
 const commentRouter = require("./commentRoute");
 const {
@@ -100,4 +101,5 @@ router.delete("/deleteUserData", deleteMyData);
 router.route("/:id").delete(deleteUser).get(getSingleUser);
 //
 router.patch("/update-user-password", updateUserPassword);
+router.patch("/block-user/:id", blockUser);
 module.exports = router;

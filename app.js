@@ -1,12 +1,14 @@
 const express = require("express");
 const app = express();
 const usersRouter = require("./routes/userRoute");
+const cloudinary = require("cloudinary").v2;
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const { globalErrorMiddleWare } = require("./Errors");
 const cors = require("cors");
 const rateLimiter = require("express-rate-limit");
 const port = 5001;
+const Bookings = require("./models/bookingModel");
 const commentRoute = require("./routes/commentRoute");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
@@ -24,25 +26,28 @@ const message = {
 };
 
 // Setting HTTPS Secure Headers
-// app.set("trust proxy", 1);
-// app.use((req, res, next) => {
-//   console.log(`Your Ip Is: ${req.ip}`);
-//   next();
-// });
-// const rLimiter = rateLimiter({
-//   httpOnly: true,
-//   windowMs: 60 * 1000 * 10, // for 10 mins
-//   limit: 150,
-//   message,
-// });
+app.set("trust proxy", 1);
+app.use((req, res, next) => {
+  console.log(`Your Ip Is: ${req.ip}`);
+  next();
+});
 
+const rLimiter = rateLimiter({
+  httpOnly: true,
+  windowMs: 60 * 1000 * 10, // for 10 mins
+  limit: 3,
+  message,
+});
+
+// app.use(async (req, res) => {
+//   await Bookings.deleteMany();
+// });
 app.use(express.static(path.join(__dirname, "staticFiles")));
 
 // Middlewares
 app.use(express.json());
-// app.use(helmet());
+app.use(helmet());
 app.use(cors({ origin: "*" }));
-app.use(morgan("dev"));
 // app.use(rLimiter);
 // ROUTES
 app.use("/users", usersRouter);

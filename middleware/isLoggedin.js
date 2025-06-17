@@ -1,10 +1,7 @@
 module.exports = (req, res, next) => {
   console.log("cookies: ", req.cookies);
-  if (req.cookies.jsonwebtoken) {
-    next();
-  } else {
-    return next("jwt cookie is not defined, please login");
-    // console.log("jwt cookie is not defined");
+  if (!req.cookies.jsonwebtoken) {
+    return next("This Is Protected Route.. please login to continue");
   }
-  // next();
+  next();
 };

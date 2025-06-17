@@ -53,7 +53,7 @@ const userSchema = new Schema(
     isActiveAccount: {
       type: Boolean,
       default: true,
-      select: false,
+      // select: false,
     },
     admins: [
       {
@@ -124,11 +124,11 @@ userSchema.methods.isCorrectPassword = async (hashedPass, enteredPass) =>
 // Pre-find Middlewares
 userSchema.pre(/^find/, function (n) {
   this.select("-__v");
-  this.find({
-    isActiveAccount: {
-      $ne: false,
-    },
-  });
+  // this.find({
+  //   isActiveAccount: {
+  //     $ne: false,
+  //   },
+  // });
   n();
 });
 const User = new model("User", userSchema);

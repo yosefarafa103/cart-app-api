@@ -30,9 +30,9 @@ exports.deleteUser = async (req, res, next) => {
   });
 };
 exports.getSingleUser = async (req, res, next) => {
-  await getUserFromCache(`${req.params.id}`, res);
+  // await getUserFromCache(`${req.params.id}`, res);
   const user = await User.findById(req.params.id);
-  setCache(`user_${req.params.id}`, user);
+  // setCache(`user_${req.params.id}`, user);
   // .populate("comments")
   // .select("text rating createdAt");
   if (!user) {

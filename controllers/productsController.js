@@ -1,7 +1,7 @@
 const { default: axios } = require("axios");
+const cloudinary = require("cloudinary");
 const BookingModel = require("../models/bookingModel");
 const Product = require("../models/productModel");
-const { getItem } = require("./factoryHandlers");
 const { createClient } = require("redis");
 const Comment = require("../models/commentsModel");
 const client = createClient();
@@ -11,15 +11,19 @@ const createProduct = async (req, res, next) => {
   const { price, productName, images } = req.body;
   const product = await Product.create(req.body);
   let files = req.files || [];
+  console.log(files);
   if (!price || !productName) {
     return next("please enter required fileds");
   }
-  // Uploading Product Images...
 
-  // if (files) {
-  // product.images = files.images.map((img) => img.filename);
-  // await product.save();
-  // }
+  if (files) {
+    product.images = files.images.map((img) => img.filename);
+    await product.save();
+  }
+  // .split("/")[1]
+  // const urls = product.images.map((img) =>
+  //   cloudinary.v2.uploader.upload(img)
+  // );
   res.status(201).json(product);
 };
 // Caching With Redis.
@@ -33,11 +37,11 @@ const setCache = async (key, data) => {
 };
 // Caching With Redis.
 const getAllProducts = async (req, res, next) => {
-  let documents = await Product.find({});
-  await setCache("products", documents);
-  if (!documents.length) {
-    return next("no Products yet..!");
-  }
+  let documents = await Product.find();
+  // await setCache("products", documents);
+  // if (!documents.length) {
+  //   return next("no Products yet..!");
+  // }
 
   if (req.query.productName) {
     await getDataFromCache(
@@ -48,7 +52,7 @@ const getAllProducts = async (req, res, next) => {
     if (!documents.length) {
       return next("no Products matches this query..!");
     }
-    await setCache(`products?productName=${req.query.productName}`, documents);
+    // await setCache(`products?productName=${req.query.productName}`, documents);
   }
   return res.status(200).json({
     documentsLength: documents.length,

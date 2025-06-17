@@ -10,19 +10,28 @@ const filterdBody = (bodyObj, ...filedsRoles) => {
   });
   return updatedObj;
 };
+exports.blockUser = async (req, res, next) => {
+  const inActiveAccount = await User.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      isActiveAccount: false,
+    }
+  );
+  res.status(200).json({
+    user: inActiveAccount,
+  });
+};
 const createSendToken = (data, statusCode, res, message, cookieData, exp) => {
   const token = createToken(data);
   if (cookieData) {
     res.cookie("jsonwebtoken", cookieData, {
       httpOnly: true,
-      expires: exp,
+      maxAge: 600000,
     });
   } else {
     res.cookie("jsonwebtoken", token, {
       httpOnly: true,
-      expires: new Date(
-        Date.now() + process.env.TOKEN_COOKIE_EXPIERSS * 60 * 1000
-      ),
+      maxAge: 600000,
     });
   }
   return res.status(statusCode).json({
@@ -56,7 +65,11 @@ exports.login = async (req, res, next) => {
   // check if password and email
   const { email, password } = req.body;
   let user = await User.findOne({ email }).select("-__v");
+  console.log(user);
   if (!user) return next("no user with this email");
+  if (!user.isActiveAccount) {
+    return next("You Can Not Loggin Because Your Account Was Blocked!");
+  }
   if (!email || !password) {
     return next("Please Enter Email And Password <Required> ⚠");
   }
@@ -65,7 +78,13 @@ exports.login = async (req, res, next) => {
   if (!isMatched) {
     return next("Incorrect Password!");
   }
-  createSendToken({ id: user._id }, 200, res, `Login Successfull`);
+  createSendToken(
+    { id: user._id },
+    200,
+    res,
+    `Login Successfull`
+    // 15 * 60 * 1000
+  );
 };
 exports.forgetPassword = async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });

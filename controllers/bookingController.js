@@ -76,10 +76,10 @@ exports.updateBooking = factoryController.updateDocument(Booking);
 exports.getBooking = factoryController.getItem(Booking);
 exports.getAllBookings = async (req, res, next) => {
   const { _id } = req.filter;
-  const bookingCache = await getUserFromCache("bookings", res);
+  // const bookingCache = await getUserFromCache("bookings", res);
   if (bookingCache) return bookingCache;
   let documents = await BookingModel.find();
-  setCache("bookings", documents);
+  // setCache("bookings", documents);
   if (!documents.length) {
     return next("no bookings yet..!");
   }
