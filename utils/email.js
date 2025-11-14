@@ -8,12 +8,7 @@ module.exports = class Email {
     this.to = user.email;
     this.redirectPage = url;
   }
-  /* 
-    from: "Yosef.A",
-    to: reciveMail,
-    subject: "Verify Email (reset password)",
-    text: message,
-*/
+ 
 
   transport() {
     return nodemailer.createTransport({

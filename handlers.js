@@ -1,18 +1,12 @@
-const { catchAsycErr } = require("./Errors");
 const User = require("./models/userModel");
-const jwt = require("jsonwebtoken");
-const client = require("redis").createClient();
 const DEFAULT_EXPIRATION = 3600;
-client.connect();
-const getUserFromCache = async (key, res) => {
-  if (await client.get(key)) {
-    res?.status(200)?.json(JSON.parse(await client.get(key)));
-    return;
-  }
-};
-const setCache = (key, data) => {
-  client.setEx(key, DEFAULT_EXPIRATION, JSON.stringify(data));
-};
+// const getUserFromCache = async (key, res) => {
+//   if (await client.get(key)) {
+//     res?.status(200)?.json(JSON.parse(await client.get(key)));
+//     return;
+//   }
+// };
+
 exports.getAllUsers = async (req, res, next) => {
   // await getUserFromCache("users", res);
   const user = await User.find({}, { __v: false });

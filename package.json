@@ -1,15 +1,17 @@
 {
-  "name": "authentecation",
+  "name": "cart-app-api",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "build": "echo 'building now..' "
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@upstash/redis": "^1.35.6",
     "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.6.1",

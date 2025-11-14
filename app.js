@@ -1,14 +1,11 @@
 const express = require("express");
 const app = express();
 const usersRouter = require("./routes/userRoute");
-const cloudinary = require("cloudinary").v2;
 const mongoose = require("mongoose");
-const morgan = require("morgan");
 const { globalErrorMiddleWare } = require("./Errors");
 const cors = require("cors");
 const rateLimiter = require("express-rate-limit");
 const port = 5001;
-const Bookings = require("./models/bookingModel");
 const commentRoute = require("./routes/commentRoute");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
@@ -20,11 +17,11 @@ const db = process.env.DB.replace("<db_password>", process.env.DB_PASS);
 const productsRouter = require("./routes/protductsRoutes");
 // Requests Limiter
 app.use(cookieParser());
+require("./lib/redis");
 const message = {
   status: "error",
   message: "too many requests! try again later",
 };
-
 // Setting HTTPS Secure Headers
 app.set("trust proxy", 1);
 app.use((req, res, next) => {
@@ -39,9 +36,6 @@ const rLimiter = rateLimiter({
   message,
 });
 
-// app.use(async (req, res) => {
-//   await Bookings.deleteMany();
-// });
 app.use(express.static(path.join(__dirname, "staticFiles")));
 
 // Middlewares

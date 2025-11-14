@@ -2,10 +2,10 @@ const { default: axios } = require("axios");
 const cloudinary = require("cloudinary");
 const BookingModel = require("../models/bookingModel");
 const Product = require("../models/productModel");
-const { createClient } = require("redis");
+// const { createClient } = require("redis");
 const Comment = require("../models/commentsModel");
-const client = createClient();
-client.connect();
+// const client = createClient();
+// client.connect();
 const DEFAULT_EXPIRATION = 3600;
 const createProduct = async (req, res, next) => {
   const { price, productName, images } = req.body;
@@ -20,28 +20,22 @@ const createProduct = async (req, res, next) => {
     product.images = files.images.map((img) => img.filename);
     await product.save();
   }
-  // .split("/")[1]
-  // const urls = product.images.map((img) =>
-  //   cloudinary.v2.uploader.upload(img)
-  // );
+
   res.status(201).json(product);
 };
 // Caching With Redis.
-const getDataFromCache = async (key, res) => {
-  if (await client.get(key)) {
-    return res?.status(200).json(JSON.parse(await client.get(key)));
-  }
-};
-const setCache = async (key, data) => {
-  await client.setEx(key, DEFAULT_EXPIRATION, JSON.stringify(data));
-};
+// const getDataFromCache = async (key, res) => {
+//   if (await client.get(key)) {
+//     return res?.status(200).json(JSON.parse(await client.get(key)));
+//   }
+// };
+// const setCache = async (key, data) => {
+//   await client.setEx(key, DEFAULT_EXPIRATION, JSON.stringify(data));
+// };
 // Caching With Redis.
 const getAllProducts = async (req, res, next) => {
   let documents = await Product.find();
-  // await setCache("products", documents);
-  // if (!documents.length) {
-  //   return next("no Products yet..!");
-  // }
+
 
   if (req.query.productName) {
     await getDataFromCache(
@@ -52,7 +46,6 @@ const getAllProducts = async (req, res, next) => {
     if (!documents.length) {
       return next("no Products matches this query..!");
     }
-    // await setCache(`products?productName=${req.query.productName}`, documents);
   }
   return res.status(200).json({
     documentsLength: documents.length,

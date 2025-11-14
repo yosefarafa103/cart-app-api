@@ -3,18 +3,18 @@ const Booking = require("../models/bookingModel");
 const User = require("../models/userModel");
 const factoryController = require("./factoryHandlers");
 const BookingModel = require("../models/bookingModel");
-const client = require("redis").createClient();
+// const client = require("redis").createClient();
 const DEFAULT_EXPIRATION = 3600;
-client.connect();
-const getUserFromCache = async (key, res) => {
-  if (await client.get(key)) {
-    res?.status(200)?.json(JSON.parse(await client.get(key)));
-    return;
-  }
-};
-const setCache = (key, data) => {
-  client.setEx(key, DEFAULT_EXPIRATION, JSON.stringify(data));
-};
+// client.connect();
+// const getUserFromCache = async (key, res) => {
+//   if (await client.get(key)) {
+//     res?.status(200)?.json(JSON.parse(await client.get(key)));
+//     return;
+//   }
+// };
+// const setCache = (key, data) => {
+//   client.setEx(key, DEFAULT_EXPIRATION, JSON.stringify(data));
+// };
 exports.getCheckoutSession = async (req, res, next) => {
   const user = await User.findById(req.params.userId);
   const price = 120;

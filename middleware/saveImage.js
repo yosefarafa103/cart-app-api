@@ -1,7 +1,6 @@
 const sharp = require("sharp");
 
 module.exports = (req, res, next) => {
-  // /staticFiles/imgs
   req.file.filename = `staticFiles/imgs/img-${Math.floor(
     Math.random() * 1e10
   )}.png`;
